@@ -1,0 +1,11 @@
+.pio
+.vscode
+.DS_Store
+data
+venv
+__pycache__
+images/*.jpg
+images/*.jpeg
+images/*.JPG
+images/*.JPEG
+src/secrets.h
