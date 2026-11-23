@@ -218,6 +218,7 @@ namespace
       int g = ((p >> 5) & 0x3F) * 255 / 63;
       int b = (p & 0x1F) * 255 / 31;
 
+      const int origR = r, origG = g, origB = b;
       r = constrain(r + cur[(x + 2) * 3 + 0] / 42, 0, 255);
       g = constrain(g + cur[(x + 2) * 3 + 1] / 42, 0, 255);
       b = constrain(b + cur[(x + 2) * 3 + 2] / 42, 0, 255);
@@ -244,9 +245,11 @@ namespace
       else if (best == 2)
         clearBit(colorBuf, outX, outY);
 
-      int errR = r - PALETTE[best].r;
-      int errG = g - PALETTE[best].g;
-      int errB = b - PALETTE[best].b;
+      // Error is taken from the original pixel, not the error-corrected one (as image-q does). Carried-in
+      // error is not re-diffused, which acts like a contrast boost: crisper edges, cleaner flat areas.
+      int errR = origR - PALETTE[best].r;
+      int errG = origG - PALETTE[best].g;
+      int errB = origB - PALETTE[best].b;
 
       spread(cur, x, 1, 8, errR, errG, errB);
       spread(cur, x, 2, 4, errR, errG, errB);
